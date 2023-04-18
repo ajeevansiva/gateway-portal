@@ -1,10 +1,22 @@
-import { useState } from "react";
-import { Table } from "antd";
-import { GATEWAY } from "../Data/GatwayTable";
-import { Link } from "react-router-dom";
-import { Button, Popconfirm } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+//External Libs
+import { Table, Button, Popconfirm } from "antd";
+
+//Icons
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
+//Customs Components
+import AddGatewayForm from "../Component/AddGatewayForm";
+
+//Table Data
+import { GatewayData } from "../Data/GatwayTable";
+
+//APIs
+import api from "../api";
+
+//Table Column Data
 const columns = [
   {
     title: "Serial Number",
@@ -51,9 +63,12 @@ const columns = [
     ),
   },
 ];
-const Gateway = () => {
+
+const Gateway = ({}) => {
+  //set button size
   const [size] = useState("Small");
 
+  //set modal controls
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -65,18 +80,38 @@ const Gateway = () => {
     setIsModalOpen(false);
   };
 
+  const [selectedGateway, setSelectedGateway] = useState(null);
+
   return (
     <>
-      <header align = "center">Gatway Management Portal</header>
+      {/* Portal Header */}
+      <header>Gatway Management Portal</header>
+
+      {/* Table Header */}
       <div className="table-header">
         <h1>Gateway</h1>
-        <Button type="primary" size={size} icon={<PlusOutlined />}>
+        <Button
+          type="primary"
+          size={size}
+          icon={<PlusOutlined />}
+          onClick={showModal}
+        >
           Add Gateway
         </Button>
       </div>
 
+      {/* Add Gateway Modal */}
+      <AddGatewayForm
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        action={selectedGateway ? "Update" : "Add"}
+        gateway={selectedGateway}
+      />
+
+      {/* Gateways Table */}
       <div className="table-wrapper">
-        <Table columns={columns} dataSource={GATEWAY} />
+        <Table columns={columns} dataSource={GatewayData} />
       </div>
     </>
   );

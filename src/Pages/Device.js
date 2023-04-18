@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Table, Button, Popconfirm } from "antd";
 import { DEVICE } from "../Data/DeviceTable";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import AddDevice from "../Component/AddDevice";
+import AddDeviceForm from "../Component/AddDeviceForm";
 
 const columns = [
   {
@@ -56,13 +56,19 @@ const Device = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
   return (
     <div>
-      <header align = "center">Gatway Management Portal</header>
+      {/* Portal Header */}
+      <header>Gatway Management Portal</header>
+
+      {/* Table Header */}
       <div className="table-header">
         <h1>Devices</h1>
         <Button
@@ -74,7 +80,11 @@ const Device = () => {
           Add Device
         </Button>
       </div>
-      <AddDevice />
+
+      {/* Add Gateway Modal */}
+      <AddDeviceForm open={isModalOpen} onCancel={handleCancel} />
+
+      {/* Devices Table */}
       <div className="table-wrapper">
         <Table columns={columns} dataSource={DEVICE} />
       </div>
